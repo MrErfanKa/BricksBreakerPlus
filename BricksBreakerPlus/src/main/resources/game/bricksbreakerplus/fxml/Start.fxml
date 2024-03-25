@@ -50,7 +50,7 @@
             <Label prefHeight="45.0" prefWidth="98.0" text="Label" />
          </children>
       </VBox>
-      <VBox blendMode="SCREEN" layoutX="21.0" layoutY="339.0" prefHeight="200.0" prefWidth="89.0">
+      <VBox fx:id="easyVBox" blendMode="SCREEN" layoutX="21.0" layoutY="339.0" prefHeight="200.0" prefWidth="89.0">
          <children>
             <Label prefHeight="45.0" prefWidth="101.0" text="Label" />
             <Label prefHeight="45.0" prefWidth="101.0" text="Label" />

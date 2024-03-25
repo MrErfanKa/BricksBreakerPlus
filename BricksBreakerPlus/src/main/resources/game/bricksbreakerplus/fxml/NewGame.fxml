@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
@@ -21,12 +21,7 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <TextArea layoutX="268.0" layoutY="192.0" prefHeight="67.0" prefWidth="266.0" promptText="username">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextArea>
-      <Label layoutX="90.0" layoutY="189.0" prefHeight="67.0" prefWidth="150.0" text="username">
+      <Label layoutX="90.0" layoutY="189.0" prefHeight="67.0" prefWidth="150.0" text="username:">
          <font>
             <Font name="System Bold" size="29.0" />
          </font>
@@ -68,10 +63,11 @@
             <Font size="22.0" />
          </font>
       </MenuButton>
-      <Label layoutX="185.0" layoutY="420.0" prefHeight="52.0" prefWidth="100.0" text="Difficulty">
+      <Label layoutX="185.0" layoutY="420.0" prefHeight="52.0" prefWidth="100.0" text="Difficulty:">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
+      <TextField layoutX="285.0" layoutY="197.0" prefHeight="52.0" prefWidth="212.0" />
    </children>
 </AnchorPane>

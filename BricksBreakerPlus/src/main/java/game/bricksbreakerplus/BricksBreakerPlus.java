@@ -3,6 +3,7 @@ package game.bricksbreakerplus;
 import game.bricksbreakerplus.controls.Controller;
 import game.bricksbreakerplus.graphic.GraphicAgent;
 import game.bricksbreakerplus.graphic.SceneLoader;
+import game.bricksbreakerplus.media.SoundLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,12 +16,14 @@ import java.net.MalformedURLException;
 public class BricksBreakerPlus {
     private Stage primaryStage;
     public GraphicAgent graphicAgent;
+    private SoundLoader soundLoader;
 
     public BricksBreakerPlus(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         graphicAgent = new GraphicAgent();
         GraphicAgent.primaryStage = primaryStage;
         Controller.graphicAgent = graphicAgent;
+        soundLoader = new SoundLoader();
 
         primaryStage.setTitle("Bricks Breaker +");
         primaryStage.setScene(SceneLoader.getStart());

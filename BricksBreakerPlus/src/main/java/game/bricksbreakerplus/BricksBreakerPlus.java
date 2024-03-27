@@ -23,11 +23,13 @@ public class BricksBreakerPlus {
         graphicAgent = new GraphicAgent();
         GraphicAgent.primaryStage = primaryStage;
         Controller.graphicAgent = graphicAgent;
-        soundLoader = new SoundLoader();
+//        soundLoader = new SoundLoader();
 
         primaryStage.setTitle("Bricks Breaker +");
-        primaryStage.setScene(SceneLoader.getStart());
+//        primaryStage.setScene(SceneLoader.getStart());
+        graphicAgent.run();
         primaryStage.show();
+
 
 
     }

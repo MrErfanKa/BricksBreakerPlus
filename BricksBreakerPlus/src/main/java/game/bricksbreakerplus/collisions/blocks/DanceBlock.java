@@ -7,8 +7,8 @@ import javafx.scene.layout.*;
 import java.io.File;
 
 public class DanceBlock extends Block{
-    public DanceBlock(String s) {
-        super(s);
+    public DanceBlock(String s, double x, double y) {
+        super(s, x, y);
         Image image = new Image(new File(Loader.getRainbow()).toURI().toString());
         BackgroundImage backgroundimage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,

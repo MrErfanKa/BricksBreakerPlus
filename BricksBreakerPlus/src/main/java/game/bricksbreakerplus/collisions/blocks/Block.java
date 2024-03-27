@@ -5,9 +5,10 @@ import javafx.scene.shape.Circle;
 
 public abstract class Block extends Label implements  RectangleAble{
     final static double WIDTH = 100, HEIGHT = 50, RAD = 20, VAR = 0.1;
-    public Block(String s){
+    public Block(String s, double x, double y){
         super(s);
         init();
+        set(x, y);
     }
     public void init(){
         setWidth(WIDTH);

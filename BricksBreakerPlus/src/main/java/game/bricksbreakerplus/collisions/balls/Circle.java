@@ -9,21 +9,29 @@ import java.net.MalformedURLException;
 
 public abstract class Circle extends ImageView implements CircleAble {
 
-    final static double WIDTH = 100, HEIGHT = 50, RAD = 20, VAR = 0.1;
+    final static double WIDTH = 100, HEIGHT = 50, RAD = 15, VAR = 0.1, ERROR = 5;
     public Circle(String url, double x, double y, double rad) throws MalformedURLException {
         super(new File(url).toURI().toString());
         this.rad = rad;
-        set(x, y);
-        centerX = x + rad;
-        centerY = y + rad;
-        setFitHeight(RAD);
-        setFitWidth(RAD);
+        set(x + Math.abs(WIDTH - 2 * rad) / 2, y + Math.abs(HEIGHT - 2 * rad) / 2);
+        centerX = getTranslateX() + rad + ERROR;
+        centerY = getTranslateY() + rad + ERROR;
+        setFitHeight(RAD * 2);
+        setFitWidth(RAD * 2);
     }
     private double rad = 0, centerX, centerY;
     @Override
     public void set(double x, double y) {
         setTranslateX(x);
         setTranslateY(y);
+    }
+
+    public void setCenterX(double centerX) {
+        this.centerX = centerX;
+    }
+
+    public void setCenterY(double centerY) {
+        this.centerY = centerY;
     }
 
     public double getRad() {
@@ -50,7 +58,8 @@ public abstract class Circle extends ImageView implements CircleAble {
 
     @Override
     public boolean ballTouch(double x, double y, double rad) {
-        return Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY)) <= rad + this.rad - VAR;
+        return Math.sqrt((x - centerX) * (x - centerX) +
+                (y - centerY) * (y - centerY)) <= rad + this.rad - VAR;
     }
 
     @Override
@@ -64,8 +73,8 @@ public abstract class Circle extends ImageView implements CircleAble {
 
     @Override
     public boolean touch(Object o) {
-        if(o instanceof Circle)
-            return ballTouch(((javafx.scene.shape.Circle)o).getCenterX(), ((javafx.scene.shape.Circle)o).getCenterY(), ((javafx.scene.shape.Circle)o).getRadius());
+        if(o instanceof NormalBall)
+            return ballTouch(((NormalBall)o).getBallCenterX(), ((NormalBall)o).getBallCenterY(), ((NormalBall)o).getRadius());
         else if(o instanceof Block)
             return rectangleTouch(((Block)o).getTranslateX(), ((Block)o).getTranslateY());
         return false;

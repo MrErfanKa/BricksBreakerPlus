@@ -1,18 +1,24 @@
 package game.bricksbreakerplus.collisions.blocks;
 
+import game.bricksbreakerplus.collisions.balls.NormalBall;
+import javafx.css.Style;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 public abstract class Block extends Label implements  RectangleAble{
-    final static double WIDTH = 100, HEIGHT = 50, RAD = 20, VAR = 0.1;
+    final static double WIDTH = 100, HEIGHT = 50, RAD = 20, VAR = 0.1, ERROR = 4;
     public Block(String s, double x, double y){
         super(s);
         init();
-        set(x, y);
+        set(x + 1, y + 1);
+        setAlignment(Pos.CENTER);
+        setFont(new Font("Bold", 15));
     }
     public void init(){
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setPrefWidth(WIDTH - 2);
+        setPrefHeight(HEIGHT - 2);
     }
 
     @Override
@@ -32,11 +38,11 @@ public abstract class Block extends Label implements  RectangleAble{
     }
     @Override
     public boolean ballTouch(double x, double y, double rad) {
-        if(y - rad + VAR <= getTranslateY() + HEIGHT && y + RAD - VAR >= getTranslateY())
-            return true;
-        else if(x - rad + VAR <= getTranslateX() + WIDTH && x + RAD - VAR >= getTranslateX())
-            return true;
-        return false;
+//        System.out.println(y - rad + VAR <= getTranslateY() + HEIGHT && y + RAD - VAR >= getTranslateY());
+//        System.out.println(x - rad + VAR <= getTranslateX() + WIDTH && x + RAD - VAR >= getTranslateX());
+//        System.out.println(x + " " + y + " " + rad + " " + getTranslateX() + " " + getTranslateY());
+        return (y - rad + VAR <= getTranslateY() + ERROR + HEIGHT && y + rad - VAR >= getTranslateY() + ERROR &&
+                x - rad + VAR <= getTranslateX() + ERROR + WIDTH && x + rad - VAR >= getTranslateX() + ERROR);
     }
 
     @Override
@@ -46,8 +52,8 @@ public abstract class Block extends Label implements  RectangleAble{
 
     @Override
     public boolean touch(Object o) {
-        if(o instanceof javafx.scene.shape.Circle)
-            return ballTouch(((Circle)o).getCenterX(), ((Circle)o).getCenterY(), ((Circle)o).getRadius());
+        if(o instanceof NormalBall)
+            return ballTouch(((NormalBall)o).getBallCenterX(), ((NormalBall)o).getBallCenterY(), ((NormalBall)o).getRadius());
         else if(o instanceof Block)
             return rectangleTouch(((Block)o).getTranslateX(), ((Block)o).getTranslateY());
         return false;

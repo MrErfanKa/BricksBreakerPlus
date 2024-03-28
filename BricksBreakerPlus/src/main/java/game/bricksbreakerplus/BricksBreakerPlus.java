@@ -20,10 +20,11 @@ public class BricksBreakerPlus {
 
     public BricksBreakerPlus(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        graphicAgent = new GraphicAgent();
         GraphicAgent.primaryStage = primaryStage;
+        soundLoader = new SoundLoader();
+        graphicAgent = new GraphicAgent(soundLoader);
         Controller.graphicAgent = graphicAgent;
-//        soundLoader = new SoundLoader();
+        soundLoader.playOnRepeat();
 
         primaryStage.setTitle("Bricks Breaker +");
 //        primaryStage.setScene(SceneLoader.getStart());

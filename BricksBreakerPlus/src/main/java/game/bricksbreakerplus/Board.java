@@ -15,7 +15,7 @@ public class Board {
     private boolean additionalHeart = false;
     private boolean showArrow = true;
 
-    private static Color ballColor = Color.BLACK;
+    public static Color ballColor = Color.BLACK;
 
     public static Color getBallColor() {
         return ballColor;
@@ -26,7 +26,7 @@ public class Board {
     private static int maxNum = 5;
     private static double bownd = 5;
 
-    private final double WIDTH = 100, HEIGHT = 50, RAD = 20, NORMALBALLRAD = 10;
+    private final double WIDTH = 100, HEIGHT = 50, RAD = 20, NORMALBALLRAD = 5;
 
 
 
@@ -67,7 +67,7 @@ public class Board {
     }
 
     public void newBoard() {
-        y = 700 - RAD;
+        y = 700 - NORMALBALLRAD * 2;
         x = Math.random() * (600 - RAD * 2);
         x += RAD;
         shapes = new ArrayList<>();
@@ -79,7 +79,15 @@ public class Board {
     }
     public void changeMode(String difficulty){
         if(difficulty.equals("easy")){
-
+            blockRandom = 0;
+            danceBlockRandom = 24;
+            earthquakeRandom = 25;
+            bombRandom = 25.5;
+            additionalBallRandom = 26;
+            heartRandom = 28;
+            powerBallRandom = 28;
+            speedBallRandom = 29;
+            nothingRandom = 30;
         }
         else if(difficulty.equals("normal")){
 
@@ -153,20 +161,23 @@ public class Board {
     }
     double blueRandom, redRandom, yellowRandom, greenRandom, cyanRandom;
     public Color getNewColor(){
-        double rand = Math.random();
-        Color color;
-        if(rand >= cyanRandom)
-            color = Color.CYAN;
-        else if(rand >= greenRandom)
-            color = Color.GREEN;
-        else if(rand >= yellowRandom)
-            color = Color.YELLOW;
-        else if(rand >= redRandom)
-            color = Color.RED;
-        else if(rand >= blueRandom)
-            color = Color.BLUE;
-        else color = Color.GOLDENROD;
-        return color;
+//        double rand = Math.random();
+//        Color color;
+//        if(rand >= cyanRandom)
+//            color = Color.CYAN;
+//        else if(rand >= greenRandom)
+//            color = Color.GREEN;
+//        else if(rand >= yellowRandom)
+//            color = Color.YELLOW;
+//        else if(rand >= redRandom)
+//            color = Color.RED;
+//        else if(rand >= blueRandom)
+//            color = Color.BLUE;
+//        else color = Color.GOLDENROD;
+//        return color;
+
+
+        return Color.CYAN;
     }
     public int getNewNumber(){
         int rand = (int)(Math.floor(Math.random() * bownd)) + minNum;

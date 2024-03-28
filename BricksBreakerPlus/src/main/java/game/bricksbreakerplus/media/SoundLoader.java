@@ -14,10 +14,12 @@ public class SoundLoader {
         Media media = new Media(new File(Loader.getThemeMusic()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
 
-        Media explosionMedia = new Media(Loader.getExplosionSound());
+        Media explosionMedia = new Media(new File(Loader.getExplosionSound()).toURI().toString());
         explosionPlayer = new MediaPlayer(explosionMedia);
 
-        Media touchMedia = new Media(Loader.getTouchSound());
+//        mediaPlayer = new MediaPlayer(explosionMedia);
+
+        Media touchMedia = new Media(new File(Loader.getTouchSound()).toURI().toString());
         touchPlayer = new MediaPlayer(touchMedia);
     }
     public void playOnRepeat(){

@@ -1,6 +1,7 @@
 package game.bricksbreakerplus;
 
 import game.bricksbreakerplus.collisions.balls.*;
+import game.bricksbreakerplus.collisions.blocks.BombBlock;
 import game.bricksbreakerplus.collisions.blocks.DanceBlock;
 import game.bricksbreakerplus.collisions.blocks.EarthquakeBlock;
 import game.bricksbreakerplus.collisions.blocks.NormalBlock;
@@ -66,21 +67,27 @@ public class Board {
         return y;
     }
 
+    public void setShapes(ArrayList<Pair<Node, Boolean>> shapes) {
+        this.shapes = shapes;
+    }
+
     public void newBoard() {
         y = 700 - NORMALBALLRAD * 2;
         x = Math.random() * (600 - RAD * 2);
         x += RAD;
-        shapes = new ArrayList<>();
     }
 
     public Board(String difficulty) {
         newBoard();
+
+        shapes = new ArrayList<>();
         changeMode(difficulty);
     }
     public void changeMode(String difficulty){
         if(difficulty.equals("easy")){
             blockRandom = 0;
-            danceBlockRandom = 24;
+            danceBlockRandom = 10;
+            //24
             earthquakeRandom = 25;
             bombRandom = 25.5;
             additionalBallRandom = 26;
@@ -137,12 +144,13 @@ public class Board {
                 o = new HeartBall(x, y);
                 shapes.add(new Pair<>(o, false));
             }
-            else if(rand < heartRandom && rand >= additionalBallRandom){
+            else if(rand < heartRandom && rand >= additionalBallRandom && !additionalHeart){
                 o = new AdditionalBall(x, y);
                 shapes.add(new Pair<>(o, false));
+                additionalHeart = true;
             }
             else if(rand < additionalBallRandom && rand >= bombRandom){
-                o = new BombBall(x, y);
+                o = new BombBlock(String.valueOf(getNewNumber()), x, y);
                 shapes.add(new Pair<>(o, false));
             }
             else if(rand < bombRandom && rand >= earthquakeRandom){

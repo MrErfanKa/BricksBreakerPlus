@@ -5,11 +5,26 @@ import javafx.scene.layout.BorderImage;
 import javafx.scene.paint.Color;
 
 public class NormalBlock extends Block{
+    private Color color;
     public NormalBlock(String s, Color color, double x, double y) {
         super(s, x, y);
-        setBackground(Background.fill(color));
+        setColor(color);
     }
     public void setColor(Color color){
         setBackground(Background.fill(color));
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+    public double getRed(){
+        return color.getRed();
+    }
+    public double getBlue(){
+        return color.getBlue();
+    }
+    public double getGreen(){
+        return color.getGreen();
     }
 }

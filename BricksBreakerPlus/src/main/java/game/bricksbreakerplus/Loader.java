@@ -4,7 +4,7 @@ public class Loader {
     private final static String speedBall = "src/main/resources/game/bricksbreakerplus/images/SpeedBall.png";
     private final static String powerBall = "src/main/resources/game/bricksbreakerplus/images/PowerBall.png";
     private final static String additionalBall = "src/main/resources/game/bricksbreakerplus/images/AdditionBall.png";
-    private final static String bombBall = "src/main/resources/game/bricksbreakerplus/images/BombBall.png";
+    private final static String bombBlock = "src/main/resources/game/bricksbreakerplus/images/BombBall.png";
     private final static String heartBall = "src/main/resources/game/bricksbreakerplus/images/HeartBall.png";
     private final static String explosionPicture = "src/main/resources/game/bricksbreakerplus/images/Explosion.png";
     private final static String rainbow = "src/main/resources/game/bricksbreakerplus/images/Rainbow.png";
@@ -41,8 +41,8 @@ public class Loader {
         return heartBall;
     }
 
-    public static String getBombBall() {
-        return bombBall;
+    public static String getBombBlock() {
+        return bombBlock;
     }
 
     public static String getAdditionalBall() {

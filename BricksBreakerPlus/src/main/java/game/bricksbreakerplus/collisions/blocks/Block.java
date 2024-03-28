@@ -29,7 +29,9 @@ public abstract class Block extends Label implements  RectangleAble{
 
     @Override
     public double distance(double x, double y) {
-        return 0;
+        double centerX = x + WIDTH / 2;
+        double centerY = y + HEIGHT / 2;
+        return Math.sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
     }
 
     @Override

@@ -27,6 +27,7 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -578,7 +579,11 @@ public class GraphicAgent{
                     flowDown.stop();
                     danceTimeline.stop();
                     speedTimeline.stop();
-                    new Lose(name, String.valueOf(score), GraphicAgent.difficulty, board.isShowArrow());
+                    try {
+                        new Lose(name, String.valueOf(score), GraphicAgent.difficulty, board.isShowArrow());
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                     return;
                 }
         }

@@ -1,6 +1,7 @@
 package game.bricksbreakerplus.graphic;
 
 import game.bricksbreakerplus.BricksBreakerPlus;
+import game.bricksbreakerplus.saveAndLoad.Saver;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -8,11 +9,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
+import java.io.FileNotFoundException;
+
 public class Lose {
     Button start, newGame, again;
     Group group;
     Scene scene;
-    public Lose(String name, String points, String difficulty, boolean showArrow){
+    public Lose(String name, String points, String difficulty, boolean showArrow) throws FileNotFoundException {
         group = new Group();
         scene = new Scene(group, 600, 800);
         GraphicAgent.switchScene(scene);
@@ -59,6 +62,8 @@ public class Lose {
         System.out.println(again.getWidth());
         System.out.println(newGame.getWidth());
         System.out.println(start.getWidth());
+        Saver.add(name, Integer.parseInt(points), difficulty);
+        Saver.save();
     }
     public void Start(){
         GraphicAgent.switchScene(SceneLoader.getStart());

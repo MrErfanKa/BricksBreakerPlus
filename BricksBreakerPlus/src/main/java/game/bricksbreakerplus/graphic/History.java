@@ -34,7 +34,7 @@ public class History {
         ImageView imageView = new ImageView(new Image(new File("src/main/resources/game/bricksbreakerplus/images/Background.jpg").toURI().toString()));
         imageView.setFitWidth(650);
         imageView.setFitHeight(850);
-        hBox.getChildren().add(imageView);
+//        hBox.getChildren().add(imageView);
 
         button = new Button("Back");
 //        button.setTranslateX(10);

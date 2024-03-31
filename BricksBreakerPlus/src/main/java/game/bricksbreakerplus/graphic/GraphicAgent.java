@@ -379,7 +379,7 @@ public class GraphicAgent{
 
 
 
-            System.out.println(shapes.size());
+//            System.out.println(shapes.size());
             //TODO : check
 //
 //
@@ -627,7 +627,6 @@ public class GraphicAgent{
         group = new Group();
         ImageView imageView = new ImageView(new Image(new File("src/main/resources/game/bricksbreakerplus/images/Background.jpg").toURI().toString()));
         imageView.setFitWidth(650);
-        imageView.setFitHeight(850);
         group.getChildren().add(imageView);
         scene = new Scene(group, 600, 800);
         board = new Board(difficulty, name, showArrows);
@@ -691,6 +690,8 @@ public class GraphicAgent{
 
         mouseY = board.getY();
         mouseX = board.getX();
+
+        imageView.setFitHeight(700 - board.getNORMALBALLRAD() * 2);
 
         scene.setOnMouseMoved(event -> {
 //            System.out.println("sd");

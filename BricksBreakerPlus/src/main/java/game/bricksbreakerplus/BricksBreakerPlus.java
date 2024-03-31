@@ -35,7 +35,7 @@ public class BricksBreakerPlus {
 //        graphicAgent.run();
 //        new Lose("dadsa", "sddad", "easy", true);
 //        new History();
-        System.out.println(Saver.games);
+//        System.out.println(Saver.games);
         primaryStage.show();
 
 

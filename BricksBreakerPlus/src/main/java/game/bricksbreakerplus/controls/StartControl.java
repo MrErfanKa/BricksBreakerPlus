@@ -40,6 +40,7 @@ public class StartControl extends Controller implements Initializable {
     @FXML
     Label hardScore;
 
+    int ns = 0, hs = 0, es = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         newGame.setOnAction(e -> NewGame());
@@ -51,14 +52,30 @@ public class StartControl extends Controller implements Initializable {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-//        System.out.println("sdas");
-        easyScore.setText("-Na");
-        easyName.setText("-Na");
-        System.out.println(easyName);
-        normalName.setText("-Na");
-        normalScore.setText("-Na");
-        hardName.setText("-Na");
-        hardScore.setText("-Na");
+        for(Pair pair : Saver.games){
+            String name =(String) ((Pair)pair.getKey()).getKey();
+            String time =(String) ((Pair)pair.getKey()).getValue();
+            int score =(int) ((Pair)pair.getValue()).getKey();
+            String dif =(String) ((Pair)pair.getValue()).getValue();
+            if(dif.equals("easy"))
+                if(score > es){
+                    easyName.setText(name);
+                    easyScore.setText(String.valueOf(score));
+                    es = score;
+                }
+            if(dif.equals("normal"))
+                if(score > ns){
+                    normalName.setText(name);
+                    normalScore.setText(String.valueOf(score));
+                    ns = score;
+                }
+            if(dif.equals("hard"))
+                if(score > hs){
+                    hardName.setText(name);
+                    hardScore.setText(String.valueOf(score));
+                    hs = score;
+                }
+        }
     }
     public void History(){
         new History();

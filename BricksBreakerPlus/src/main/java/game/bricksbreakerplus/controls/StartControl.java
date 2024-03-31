@@ -1,7 +1,10 @@
 package game.bricksbreakerplus.controls;
 
+import game.bricksbreakerplus.graphic.GraphicAgent;
+import game.bricksbreakerplus.graphic.SceneLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
@@ -18,15 +21,11 @@ public class StartControl extends Controller implements Initializable {
     @FXML
     Button exit;
 
-    @FXML
-    TextArea easy;
-    @FXML
-    TextArea normal;
-    @FXML
-    TextArea hard;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        newGame.setOnAction(e -> NewGame());
+    }
+    public void NewGame(){
+        GraphicAgent.switchScene(SceneLoader.getNewGame());
     }
 }

@@ -16,6 +16,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -24,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,15 +39,17 @@ public class GraphicAgent{
     private int hearts = 1;
     private static String difficulty = "easy";
     private final double DISTANCE = 10, SHADOWINT = 0.3, STANDARDDISS = 20, VAR = 0.5;
+    private final double BOMBRATE = 200;
+    private int score = 0, hitBalls;
     private Board board;
     private final double UPPAGE = 100, DOWNPAGE = 700;
-    public void switchScene(Scene scene){
+    public static void switchScene(Scene scene){
         primaryStage.setScene(scene);
     }
 
 
-    private Label time, remainBalls, timeString;
-    private double downRate = 0.4, addNewThings = 100 / downRate, ballRate = 3.5, defaultBallRate = 3.5;
+    private Label time, remainBalls, timeString, scoreLabel, nameLabel;
+    private double downRate = 0.4, addNewThings = 100 / downRate, ballRate = 3.5, defaultBallRate = 3.5, ballGo = 1;
     private int checkToAdd = 0;
 
     private SoundLoader soundLoader;
@@ -61,12 +66,17 @@ public class GraphicAgent{
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        changeArrow();
+        checkFinish();
+        showScore();
     }));
+    public void showScore(){
+        score = hitBalls - Integer.parseInt(time.getText()) / 10;
+        scoreLabel.setText(String.valueOf(score));
+    }
     public void checkBalls(){
+        for(NormalBall normalBall : shownBallsArray)
+            group.getChildren().remove(normalBall);
         if(board.isShowArrow()) {
-            for(NormalBall normalBall : shownBallsArray)
-                group.getChildren().remove(normalBall);
             shownBallsArray.clear();
             double difX = Math.abs(board.getX() - mouseX);
             double difY = Math.abs(board.getY() - mouseY);
@@ -115,8 +125,6 @@ public class GraphicAgent{
         double difWantedY = difY * difference / qotr;
         double nextX = startX + difWantedX * xChange;
         double nextY = startY - difWantedY;
-//        if(difWantedY / difWantedX <= 0.25)
-//            System.out.println("o");
         if(difWantedY / difWantedX <= 0.15)
             return;
         showBalls(nextX, nextY, finalX, finalY, difference, xChange);
@@ -129,22 +137,12 @@ public class GraphicAgent{
         shootBall();
     }
 
-    private int speedTimelineNum = 0, powerTimelineNum = 0, danceTimelineNum = 0;
+    private int danceTimelineNum = 0;
     Timeline speedTimeline = new Timeline(new KeyFrame(Duration.seconds(15), event -> {
-        speedTimelineNum ++;
-        ballRate *= 2;
-        if(speedTimelineNum == 2) {
-            ballRate /= 2;
-            speedTimelineNum = 0;
-        }
+            ballGo = 1;
     }));
     Timeline powerTimeline = new Timeline(new KeyFrame(Duration.seconds(15), event -> {
-        powerTimelineNum ++;
-        decreaseBall = 2;
-        if(powerTimelineNum == 2){
             decreaseBall = 1;
-            powerTimelineNum = 0;
-        }
     }));
     //TODo : sargije : function and uses of this, maybe double x , y and use them, and change them in mouseMoves function
 
@@ -230,35 +228,94 @@ public class GraphicAgent{
         danceTimeline.stop();
         danceTimeline.play();
     }
+    public void power(){
+//        System.out.println("run");
+        powerTimeline.stop();
+        powerTimeline.setCycleCount(1);
+        decreaseBall = 2;
+        powerTimeline.play();
+//        System.out.println(" " + decreaseBall);
+    }
+    public void speed(){
+        speedTimeline.stop();
+        speedTimeline.setCycleCount(2);
+        ballGo = 2;
+//        ballRate = defaultBallRate * 2;
+        speedTimeline.play();
+    }
+
+    ArrayList<Pair<ImageView, Long>> views = new ArrayList<>();
+    public void removeBombExplosion(){
+        ArrayList<Pair<ImageView, Long>> removes = new ArrayList<>();
+        for(Pair pair : views){
+            ImageView imageView = (ImageView) pair.getKey();
+            long l = (long) pair.getValue();
+            if(System.currentTimeMillis() - l >= 3000){
+                removes.add(pair);
+                group.getChildren().remove(imageView);
+            }
+        }
+        for(Pair pair : removes)
+            views.remove(pair);
+        removes.clear();
+    }
+    Image bombImage;
+    public void showBombExplosion(BombBlock block){
+        soundLoader.playExplosion();
+        ImageView imageView = new ImageView(bombImage);
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
+        imageView.setTranslateX(block.getTranslateX());
+        imageView.setTranslateY(block.getTranslateY() - 30);
+        group.getChildren().add(imageView);
+        views.add(new Pair<>(imageView, System.currentTimeMillis()));
+
+    }
+    ArrayList<Pair<Node, Boolean>> removes = new ArrayList<>();
     public void bombExplosion(BombBlock bombBall){
         //TODo : complete this
+//        System.out.println(bombBall);
+        ArrayList<BombBlock> nextBlocks = new ArrayList<>();
         double startX = bombBall.getCenterX();
         double startY = bombBall.getCenterY();
 
-        ArrayList<Pair<Node, Boolean>> shapes = board.getShapes();
-        ArrayList<BombBlock> nextBombs = new ArrayList<BombBlock>();
-        ArrayList<Node> removes = new ArrayList<>();
-        for(Pair pair : shapes){
+        showBombExplosion(bombBall);
+
+        ArrayList<Pair<Node, Boolean>> shape = board.getShapes();
+        for(Pair pair : shape){
             Node node = (Node) pair.getKey();
-            boolean shown = (boolean) pair.getValue();
-
-
+            if(node.getTranslateY() == bombBall.getTranslateY() && node.getTranslateX() == bombBall.getTranslateX())
+                continue;
             if(node instanceof Block){
-                if(node instanceof BombBlock){
-                    ((BombBlock)node).setText(String.valueOf(Integer.parseInt(((BombBlock)node).getText()) - 50));
-                    if(Integer.parseInt(((BombBlock)node).getText()) <= 50) {
-                        removes.add(node);
-                        nextBombs.add((BombBlock) node);
-                    }
-                }
-                else {
-
+                double centerX = node.getTranslateX() + board.getWIDTH() / 2;
+                double centerY = node.getTranslateY() + board.getHEIGHT() / 2;
+                if(((Block)node).distance(centerX, centerY) <= BOMBRATE){
+                    int num = Integer.parseInt(((Block) node).getText());
+                    num = Math.max(num - 50, 0);
+                    ((Block) node).setText(String.valueOf(num));
+                    if(num == 0)
+                        removes.add(new Pair<>(node,(Boolean) pair.getValue()));
                 }
             }
         }
+        for(Pair pair : removes){
+            Node node = (Node) pair.getKey();
+//            System.out.println(node);
+            board.getShapes().remove(pair);
+            group.getChildren().remove(node);
+            if(node instanceof DanceBlock)
+                dance();
+            else if(node instanceof BombBlock)
+                nextBlocks.add((BombBlock) node);
+        }
+        removes.clear();
+        for(BombBlock block : nextBlocks)
+            bombExplosion(block);
+        nextBlocks.clear();
     }
     private int newBalls = 0, decreaseBall = 1;
-    private boolean isRunning = false, isTouchFloor = false;
+    private boolean isRunning = false, isTouchFloor = false, pastShowArrow = false;
     private double nowX, nowY, changeX, changeY;
     private int remainBallBeforeShoot = 1, differentTime = 0;
     private NormalBall shadowBall;
@@ -279,6 +336,8 @@ public class GraphicAgent{
             differentTime = 0;
         }
 
+        removeBombExplosion();
+        showScore();
 
         ArrayList<Pair<Node, Boolean>> removes = new ArrayList<>();
         for(NormalBall normalBall : balls){
@@ -299,8 +358,11 @@ public class GraphicAgent{
                 group.getChildren().remove(normalBall);
                 removeBalls.add(normalBall);
             }
-            double nextX = normalBall.getX() + normalBall.getChangeX();
-            double nextY = normalBall.getY() + normalBall.getChangeY();
+            double nextX = normalBall.getX() + normalBall.getChangeX() * ballGo;
+            double nextY = normalBall.getY() + normalBall.getChangeY() * ballGo;
+//            System.out.println(ballGo);
+//            nextX *= ballGo;
+//            nextY *= ballGo;
             normalBall.set(nextX, nextY);
 
             if(nextY <= UPPAGE + VAR + 5)
@@ -311,8 +373,20 @@ public class GraphicAgent{
             if(nextX <= VAR + 5)
                 normalBall.setChangeX(normalBall.getChangeX() * -1);
 
-            //TODO check touch
             ArrayList<Pair<Node, Boolean>> shapes = board.getShapes();
+
+
+
+
+
+            System.out.println(shapes.size());
+            //TODO : check
+//
+//
+//
+//
+//
+//            sadsd
             for(Pair pair : shapes){
                 Node node = (Node) pair.getKey();
                 boolean shown = (boolean) pair.getValue();
@@ -320,14 +394,10 @@ public class GraphicAgent{
                 {
                     if(node instanceof Circle && ((Circle)node).touch(normalBall)) {
                         if (node instanceof SpeedBall){
-                            speedTimeline.stop();
-                            speedTimelineNum = 0;
-                            speedTimeline.play();
+                            speed();
                         }
                         else if(node instanceof PowerBall){
-                            powerTimeline.stop();
-                            powerTimelineNum = 0;
-                            powerTimeline.play();
+                            power();
                         }
                         else if(node instanceof AdditionalBall){
                             newBalls ++;
@@ -340,14 +410,55 @@ public class GraphicAgent{
                     else if(node instanceof Block && ((Block)node).touch(normalBall)){
 //                        System.out.println("dasdas");
                         //TODO : check touch and change the changeX and changeY
-                        ((Block)node).setText(String.valueOf(Integer.parseInt(((Block)node).getText()) - 1));
-                        if(((Block)node).getText().equals("0")){
-                            //TODo : check for additional heart
+//                        System.out.println(decreaseBall);
+                        ((Block)node).setText(String.valueOf(Integer.parseInt(((Block)node).getText()) - decreaseBall));
+                        if(((Block)node).getText().equals("0") || ((Block)node).getText().equals("-1")){
                             removes.add(new Pair<>(node, shown));
                             if(node instanceof DanceBlock)
                                 dance();
                             else if(node instanceof BombBlock)
                                 bombExplosion((BombBlock) node);
+                        }
+
+                        //TODO : check the gooshe point
+                        // TODo : 2 touches when it touch gooshe of balls sometime, we shouldn't change the x = y or x = -y for some
+                        // TODO : touch, we maybe should check the change x, change y, last point of the ball
+                        boolean touchLeft = ((Block)node).touchLeft(normalBall);
+                        boolean touchRight = ((Block)node).touchRight(normalBall);
+                        boolean touchDown = ((Block)node).touchDown(normalBall);
+                        boolean touchUp = ((Block)node).touchUp(normalBall);
+
+                        if(touchLeft || touchRight)
+                            normalBall.setChangeX(normalBall.getChangeX() * -1);
+                        if(touchDown || touchUp)
+                            normalBall.setChangeY(normalBall.getChangeY() * -1);
+                        if(!touchDown && !touchLeft && !touchRight && !touchUp){
+                            //   / line : x = y, y = x;
+                            //   \ line : x = y * -1, y = x * -1
+                            if(normalBall.getBallCenterX() < node.getTranslateX() + board.getWIDTH() / 2 &&
+                                    normalBall.getBallCenterY() < node.getTranslateY() + board.getHEIGHT() / 2){
+                                double tempX = normalBall.getChangeX() * -1, tempY = normalBall.getChangeY() * -1;
+                                normalBall.setChangeX(tempY);
+                                normalBall.setChangeY(tempX);
+                            }
+                            else if(normalBall.getBallCenterX() < node.getTranslateX() + board.getWIDTH() / 2 &&
+                                    normalBall.getBallCenterY() > node.getTranslateY() + board.getHEIGHT() / 2){
+                                double tempX = normalBall.getChangeX(), tempY = normalBall.getChangeY();
+                                normalBall.setChangeX(tempY);
+                                normalBall.setChangeY(tempX);
+                            }
+                            else if(normalBall.getBallCenterX() > node.getTranslateX() + board.getWIDTH() / 2 &&
+                                    normalBall.getBallCenterY() > node.getTranslateY() + board.getHEIGHT() / 2){
+                                double tempX = normalBall.getChangeX() * -1, tempY = normalBall.getChangeY() * -1;
+                                normalBall.setChangeX(tempY);
+                                normalBall.setChangeY(tempX);
+                            }
+                            else if(normalBall.getBallCenterX() > node.getTranslateX() + board.getWIDTH() / 2 &&
+                                    normalBall.getBallCenterY() < node.getTranslateY() + board.getHEIGHT() / 2){
+                                double tempX = normalBall.getChangeX(), tempY = normalBall.getChangeY();
+                                normalBall.setChangeX(tempY);
+                                normalBall.setChangeY(tempX);
+                            }
                         }
                     }
                 }
@@ -358,6 +469,8 @@ public class GraphicAgent{
             Node node = (Node) pair.getKey();
             group.getChildren().remove(node);
             board.getShapes().remove(pair);
+            if(node instanceof Block)
+                hitBalls += ((Block)node).getFirstNum();
         }
         removes.clear();
 //
@@ -374,6 +487,8 @@ public class GraphicAgent{
         }
     }));
     public void finishShoot(){
+        board.setShowArrow(pastShowArrow);
+        checkBalls();
         if(!isTouchFloor){
             board.newBoard();
             nowX = board.getX();
@@ -382,28 +497,29 @@ public class GraphicAgent{
 
         group.getChildren().remove(shadowBall);
         remainBallBeforeShoot ++;
-        //TODO : add additional ball
         remainBalls.setText(String.valueOf(remainBallBeforeShoot + newBalls));
         shoot.stop();
 //        System.out.println(nowX + " " + nowY);
         board.setX(nowX);
         board.setY(nowY);
-        mainBall = new NormalBall(shadowBall.getX(), shadowBall.getY(), board.getNORMALBALLRAD(), Board.getBallColor());
+
+        double nowXMainBall = shadowBall == null ? nowX : shadowBall.getX();
+        double nowYMainBall = shadowBall == null ? nowY : shadowBall.getY();
+
+        mainBall = new NormalBall(nowXMainBall, nowYMainBall, board.getNORMALBALLRAD(), Board.getBallColor());
         group.getChildren().add(mainBall);
+        for(Pair pair : board.getShapes()){
+            Node node = (Node) pair.getKey();
+            checkToAdd += (int) (board.getHEIGHT() / (downRate * 2));
+            node.setTranslateY(node.getTranslateY() + (board.getHEIGHT() / (downRate * 2)));
+        }
         flowDown.play();
     }
     public void shootBall(){
-        // TODO
-        differentTime = 1;
-        decreaseBall = 1;
-        newBalls = 0;
-        speedTimelineNum = 0;
-        powerTimelineNum = 0;
-        isTouchFloor = false;
-        isRunning = true;
-        ballRate = defaultBallRate;
+//        System.out.println("now");
+
         double startX = board.getX(), startY = board.getY(),
-                finalX = mouseX, finalY = mouseY, difference = ballRate;
+                finalX = mouseX, finalY = mouseY, difference = defaultBallRate;
         double difX = Math.abs(startX - finalX);
         double difY = Math.abs(startY - finalY);
         double qotr = Math.sqrt(difY * difY + difX * difX);
@@ -412,14 +528,24 @@ public class GraphicAgent{
         double nextX = difWantedX * (finalX < startX ? -1 : 1);
         double nextY = difWantedY * -1;
 
-        //TODO : check for bad moves like sin <= 0.25
-
-        if(finalY <= UPPAGE || finalY >= DOWNPAGE - board.getNORMALBALLRAD() * 2 - VAR ||
-            difY / difX <= 0.15) {
-            remainBallBeforeShoot --;
-            finishShoot();
+        //startX <= 0 || startX >= 600 - board.getNORMALBALLRAD() * 2 || startY <= UPPAGE + board.getNORMALBALLRAD() || startY >= DOWNPAGE - board.getNORMALBALLRAD()
+        if(finalY <= UPPAGE + board.getNORMALBALLRAD() || finalY >= DOWNPAGE - board.getNORMALBALLRAD() * 2 + VAR ||
+            difWantedY / difWantedX <= 0.15) {
+            flowDown.play();
             return;
         }
+
+        differentTime = 1;
+//        decreaseBall = 1;
+        newBalls = 0;
+        isTouchFloor = false;
+        isRunning = true;
+        ballRate = defaultBallRate;
+//        ballGo = 1;
+        pastShowArrow = board.isShowArrow();
+        board.setShowArrow(false);
+        checkBalls();
+
         changeX = nextX;
         changeY = nextY;
 //        System.out.println(
@@ -435,20 +561,36 @@ public class GraphicAgent{
         shoot.play();
     }
 
+    String name, point;
 
-
-    private void changeArrow() {
-        if(!board.isShowArrow())
-            return;
-
-
-        // TODO
+    private void checkFinish() {
+        ArrayList<Pair<Node, Boolean>> removes = new ArrayList<>();
+        for(Pair pair : board.getShapes()){
+            Node node = (Node) pair.getKey();
+            boolean shown = (boolean) pair.getValue();
+            if(node instanceof Circle)
+                if(node.getTranslateY() + ((Circle)node).getRad() * 2 >= DOWNPAGE - board.getNORMALBALLRAD() * 2){
+                    removes.add(pair);
+                    group.getChildren().remove(node);
+                }
+            if(node instanceof Block)
+                if(((Block)node).getTranslateY() + board.getHEIGHT() >= DOWNPAGE - board.getNORMALBALLRAD() * 2){
+                    flowDown.stop();
+                    danceTimeline.stop();
+                    speedTimeline.stop();
+                    new Lose(name, String.valueOf(score), GraphicAgent.difficulty, board.isShowArrow());
+                    return;
+                }
+        }
     }
 
     public void changeLabels() throws MalformedURLException {
         //TODo maybe hhere
+
+        removeBombExplosion();
+
         checkToAdd ++;
-        if(checkToAdd == board.getHEIGHT() / downRate) {
+        if(checkToAdd >= board.getHEIGHT() / downRate) {
             board.addNewLayer();
             checkToAdd = 0;
         }
@@ -460,6 +602,8 @@ public class GraphicAgent{
                 group.getChildren().add(node);
                 group.getChildren().remove(line1);
                 group.getChildren().add(line1);
+                group.getChildren().remove(line2);
+                group.getChildren().add(line2);
             }
             if(node.getTranslateY() >= UPPAGE - board.getHEIGHT())
                 shown = true;
@@ -478,12 +622,18 @@ public class GraphicAgent{
         GraphicAgent.difficulty = difficulty;
     }
 
-    public GraphicAgent(SoundLoader soundLoader) {
+    public GraphicAgent(SoundLoader soundLoader, String difficulty, String name, boolean showArrows) {
         this.soundLoader = soundLoader;
         group = new Group();
         scene = new Scene(group, 600, 800);
-        board = new Board(difficulty);
+        board = new Board(difficulty, name, showArrows);
         balls = new ArrayList<>();
+
+        GraphicAgent.setDifficulty(difficulty);
+        if(difficulty.equals("normal"))
+            downRate = 0.55;
+        if(difficulty.equals("hard"))
+            downRate = 0.65;
 
         mainBall = new NormalBall(board.getX(), board.getY(), board.getNORMALBALLRAD(), Board.getBallColor());
         group.getChildren().add(mainBall);
@@ -497,6 +647,22 @@ public class GraphicAgent{
         time.setAlignment(Pos.CENTER);
         group.getChildren().add(time);
 
+        scoreLabel = new Label("0");
+        scoreLabel.setFont(new Font("Bold", 18));
+        scoreLabel.setPrefWidth(100);
+        scoreLabel.setTranslateX(150 - scoreLabel.getPrefWidth() / 2);
+        scoreLabel.setTranslateY(745);
+        scoreLabel.setAlignment(Pos.CENTER);
+        group.getChildren().add(scoreLabel);
+
+        nameLabel = new Label(name);
+        nameLabel.setFont(new Font("Bold", 18));
+        nameLabel.setPrefWidth(100);
+        nameLabel.setTranslateX(150 - scoreLabel.getPrefWidth() / 2);
+        nameLabel.setTranslateY(715);
+        nameLabel.setAlignment(Pos.CENTER);
+        group.getChildren().add(nameLabel);
+
         timeString = new Label("Time:");
 //        timeString.setPrefHeight(50);
         timeString.setFont(new Font("Bold", 18));
@@ -505,11 +671,13 @@ public class GraphicAgent{
         timeString.setAlignment(Pos.CENTER);
         group.getChildren().add(timeString);
 
+        bombImage = new Image(new File("src/main/resources/game/bricksbreakerplus/images/Explosion.png").toURI().toString());
+
         remainBalls = new Label("1");
-        remainBalls.setPrefHeight(50);
+//        remainBalls.setPrefHeight(50);
         remainBalls.setPrefWidth(100);
         remainBalls.setTranslateX(300 - remainBalls.getPrefWidth() / 2);
-        remainBalls.setTranslateY(720);
+        remainBalls.setTranslateY(700);
         remainBalls.setAlignment(Pos.CENTER);
         remainBalls.setFont(new Font("Bold", 18));
         group.getChildren().add(remainBalls);
@@ -535,7 +703,7 @@ public class GraphicAgent{
     Line line1, line2;
     public void run(){
         line1 = new Line(0, UPPAGE, 600, UPPAGE);
-        line2 = new Line(0, DOWNPAGE, 600, DOWNPAGE);
+        line2 = new Line(0, DOWNPAGE - board.getNORMALBALLRAD() * 2, 600, DOWNPAGE - board.getNORMALBALLRAD() * 2);
 
         group.getChildren().add(line1);
         group.getChildren().add(line2);
@@ -544,3 +712,7 @@ public class GraphicAgent{
         changeTime.play();
     }
 }
+
+// TODo : check the finish point, additional heart, ...
+//TODO : check ball shadow in board
+//todo : check if the name is not empty in new game scene

@@ -24,6 +24,8 @@ public abstract class Circle extends ImageView implements CircleAble {
     public void set(double x, double y) {
         setTranslateX(x);
         setTranslateY(y);
+        centerY = y + getRad();
+        centerX = x + getRad();
     }
 
     public void setCenterX(double centerX) {
@@ -39,11 +41,11 @@ public abstract class Circle extends ImageView implements CircleAble {
     }
 
     public double getCenterX() {
-        return centerX;
+        return getTranslateX() + rad;
     }
 
     public double getCenterY() {
-        return centerY;
+        return getTranslateY() + rad;
     }
 
     @Override

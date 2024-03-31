@@ -22,6 +22,7 @@ public class Board {
         return ballColor;
     }
 
+    private String name, difficulty;
     private static int increase = 1;
     private static int minNum = 1;
     private static int maxNum = 5;
@@ -63,6 +64,7 @@ public class Board {
         return x;
     }
 
+
     public double getY() {
         return y;
     }
@@ -77,30 +79,59 @@ public class Board {
         x += RAD;
     }
 
-    public Board(String difficulty) {
+    public Board(String difficulty, String name, boolean showArrow) {
         newBoard();
 
+        this.name = name;
+        this.showArrow = showArrow;
         shapes = new ArrayList<>();
+        this.difficulty = difficulty;
+        minNum = 1;
         changeMode(difficulty);
     }
     public void changeMode(String difficulty){
         if(difficulty.equals("easy")){
             blockRandom = 0;
-            danceBlockRandom = 10;
-            //24
-            earthquakeRandom = 25;
+            danceBlockRandom = 24;
+            earthquakeRandom = 25.5;
             bombRandom = 25.5;
             additionalBallRandom = 26;
             heartRandom = 28;
             powerBallRandom = 28;
             speedBallRandom = 29;
             nothingRandom = 30;
+//            blockRandom = 0;
+//            danceBlockRandom = 0;
+//            earthquakeRandom = 0;
+//            bombRandom = 0;
+//            additionalBallRandom = 15;
+//            heartRandom = 15;
+//            powerBallRandom = 15;
+//            speedBallRandom = 15;
+//            nothingRandom = 30;
+
         }
         else if(difficulty.equals("normal")){
-
+            blockRandom = 0;
+            danceBlockRandom = 35;
+            earthquakeRandom = 36.2;
+            bombRandom = 36.2;
+            additionalBallRandom = 37;
+            heartRandom = 38.4;
+            powerBallRandom = 38.4;
+            speedBallRandom = 39.2;
+            nothingRandom = 40;
         }
         else{
-
+            blockRandom = 0;
+            danceBlockRandom = 41;
+            earthquakeRandom = 42.4;
+            bombRandom = 42.4;
+            additionalBallRandom = 43;
+            heartRandom = 44;
+            powerBallRandom = 44;
+            speedBallRandom = 44.5;
+            nothingRandom = 45;
         }
     }
 
@@ -125,7 +156,7 @@ public class Board {
 
     public void addNewLayer() throws MalformedURLException {
         double x = 0, y = 0;
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 6; i++){
             x = WIDTH * i;
             double rand = Math.random() * 100;
             Node o;
@@ -166,25 +197,18 @@ public class Board {
                 shapes.add(new Pair<>(o, false));
             }
         }
+        if(difficulty.equals("easy")){
+            minNum += 1;
+        }
+        else if(difficulty.equals("normal")){
+            minNum += 2;
+        }
+        else{
+            minNum += 3;
+        }
     }
     double blueRandom, redRandom, yellowRandom, greenRandom, cyanRandom;
     public Color getNewColor(){
-//        double rand = Math.random();
-//        Color color;
-//        if(rand >= cyanRandom)
-//            color = Color.CYAN;
-//        else if(rand >= greenRandom)
-//            color = Color.GREEN;
-//        else if(rand >= yellowRandom)
-//            color = Color.YELLOW;
-//        else if(rand >= redRandom)
-//            color = Color.RED;
-//        else if(rand >= blueRandom)
-//            color = Color.BLUE;
-//        else color = Color.GOLDENROD;
-//        return color;
-
-
         return Color.CYAN;
     }
     public int getNewNumber(){

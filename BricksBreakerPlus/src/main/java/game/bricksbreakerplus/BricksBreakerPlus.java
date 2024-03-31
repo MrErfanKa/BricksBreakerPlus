@@ -2,9 +2,11 @@ package game.bricksbreakerplus;
 
 import game.bricksbreakerplus.controls.Controller;
 import game.bricksbreakerplus.graphic.GraphicAgent;
+import game.bricksbreakerplus.graphic.History;
 import game.bricksbreakerplus.graphic.Lose;
 import game.bricksbreakerplus.graphic.SceneLoader;
 import game.bricksbreakerplus.media.SoundLoader;
+import game.bricksbreakerplus.saveAndLoad.Saver;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -27,10 +29,13 @@ public class BricksBreakerPlus {
         Controller.graphicAgent = graphicAgent;
         soundLoader.playOnRepeat();
 
+        Saver.load();
         primaryStage.setTitle("Bricks Breaker +");
         primaryStage.setScene(SceneLoader.getStart());
 //        graphicAgent.run();
 //        new Lose("dadsa", "sddad", "easy", true);
+//        new History();
+        System.out.println(Saver.games);
         primaryStage.show();
 
 

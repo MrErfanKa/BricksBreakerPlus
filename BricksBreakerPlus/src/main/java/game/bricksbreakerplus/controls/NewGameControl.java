@@ -4,6 +4,7 @@ import game.bricksbreakerplus.Board;
 import game.bricksbreakerplus.BricksBreakerPlus;
 import game.bricksbreakerplus.Resource;
 import game.bricksbreakerplus.graphic.GraphicAgent;
+import game.bricksbreakerplus.graphic.SceneLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,6 +30,8 @@ public class NewGameControl extends Controller implements Initializable {
     RadioButton normal;
     @FXML
     RadioButton hard;
+    @FXML
+    Button back;
 
 
     Color ballColor;
@@ -41,6 +44,10 @@ public class NewGameControl extends Controller implements Initializable {
         easy.setOnAction(e -> Easy());
         normal.setOnAction(e -> Normal());
         hard.setOnAction(e -> Hard());
+        back.setOnAction(e -> Back());
+    }
+    public void Back(){
+        GraphicAgent.switchScene(SceneLoader.getStart());
     }
     public void Start(){
         ballColor = color.getValue();

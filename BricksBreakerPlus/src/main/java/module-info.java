@@ -4,6 +4,7 @@ module game.bricksbreakerplus {
     requires javafx.media;
 
     requires org.controlsfx.controls;
+    requires org.json;
 
     opens game.bricksbreakerplus.controls to javafx.fxml;
     exports game.bricksbreakerplus;

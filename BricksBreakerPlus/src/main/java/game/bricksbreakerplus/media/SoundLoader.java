@@ -1,6 +1,7 @@
 package game.bricksbreakerplus.media;
 
 import game.bricksbreakerplus.Loader;
+import game.bricksbreakerplus.Resource;
 import game.bricksbreakerplus.graphic.SceneLoader;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -23,6 +24,8 @@ public class SoundLoader {
         touchPlayer = new MediaPlayer(touchMedia);
     }
     public void playOnRepeat(){
+        if(!Resource.isPlayMusic())
+            return;
         mediaPlayer.play();
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer.seek(Duration.ZERO);
@@ -32,13 +35,13 @@ public class SoundLoader {
     public void playExplosion(){
         explosionPlayer.play();
         explosionPlayer.setOnEndOfMedia(() -> {
-            mediaPlayer.play();
+            playOnRepeat();
         });
     }
     public void playTouch(){
         touchPlayer.play();
         touchPlayer.setOnEndOfMedia(() -> {
-            mediaPlayer.play();
+            playOnRepeat();
             // here for explosion sound error maybe
             if(explosionPlayer.isAutoPlay())
                 explosionPlayer.play();

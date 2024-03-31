@@ -1,62 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.bricksbreakerplus.controls.SettingControl">
    <children>
-      <RadioButton layoutX="300.0" layoutY="140.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" selected="true" text="play">
+      <ImageView fitHeight="820.0" fitWidth="659.0">
+         <image>
+            <Image url="@../images/Background.jpg" />
+         </image>
+      </ImageView>
+      <RadioButton fx:id="play" layoutX="300.0" layoutY="140.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" selected="true" text="play" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="410.0" layoutY="140.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="pause">
+      <RadioButton fx:id="pause" layoutX="410.0" layoutY="140.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="pause" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font>
       </RadioButton>
-      <Label layoutX="91.0" layoutY="127.0" prefHeight="58.0" prefWidth="108.0" text="Music">
+      <Label layoutX="91.0" layoutY="127.0" prefHeight="58.0" prefWidth="108.0" text="Music" textFill="WHITE">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <RadioButton layoutX="302.0" layoutY="312.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" selected="true" text="show">
+      <RadioButton fx:id="show" layoutX="302.0" layoutY="312.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" selected="true" text="show" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="412.0" layoutY="312.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="hidden">
+      <RadioButton fx:id="hidden" layoutX="412.0" layoutY="312.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="hidden" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font>
       </RadioButton>
-      <Label layoutX="93.0" layoutY="299.0" prefHeight="58.0" prefWidth="169.0" text="show arrows">
+      <Label layoutX="93.0" layoutY="299.0" prefHeight="58.0" prefWidth="169.0" text="Arrows" textFill="WHITE">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <RadioButton layoutX="302.0" layoutY="480.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" selected="true" text="save">
+      <RadioButton fx:id="save" layoutX="302.0" layoutY="480.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" selected="true" text="save" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="412.0" layoutY="480.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="97.0" text="don't save">
+      <RadioButton fx:id="doNotSave" layoutX="412.0" layoutY="480.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="108.0" text="don't save" textFill="WHITE">
          <font>
             <Font size="17.0" />
          </font>
       </RadioButton>
-      <Label layoutX="93.0" layoutY="467.0" prefHeight="58.0" prefWidth="148.0" text="Game save">
+      <Label layoutX="93.0" layoutY="467.0" prefHeight="58.0" prefWidth="148.0" text="Game save" textFill="WHITE">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Label layoutX="45.0" layoutY="680.0" prefHeight="58.0" prefWidth="97.0" text="Back">
+      <Button fx:id="back" layoutX="45.0" layoutY="689.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="97.0" text="Back">
          <font>
-            <Font size="30.0" />
+            <Font size="22.0" />
          </font>
-      </Label>
+      </Button>
    </children>
 </AnchorPane>

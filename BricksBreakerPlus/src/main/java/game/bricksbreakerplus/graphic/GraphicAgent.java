@@ -625,6 +625,10 @@ public class GraphicAgent{
     public GraphicAgent(SoundLoader soundLoader, String difficulty, String name, boolean showArrows) {
         this.soundLoader = soundLoader;
         group = new Group();
+        ImageView imageView = new ImageView(new Image(new File("src/main/resources/game/bricksbreakerplus/images/Background.jpg").toURI().toString()));
+        imageView.setFitWidth(650);
+        imageView.setFitHeight(850);
+        group.getChildren().add(imageView);
         scene = new Scene(group, 600, 800);
         board = new Board(difficulty, name, showArrows);
         balls = new ArrayList<>();

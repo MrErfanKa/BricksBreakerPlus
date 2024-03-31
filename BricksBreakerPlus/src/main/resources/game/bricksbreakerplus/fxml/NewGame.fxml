@@ -6,34 +6,41 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.bricksbreakerplus.controls.NewGameControl">
    <children>
+      <ImageView fitHeight="864.0" fitWidth="651.0">
+         <image>
+            <Image url="@../images/Background.jpg" />
+         </image>
+      </ImageView>
       <Button fx:id="start" layoutX="225.0" layoutY="605.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="150.0" style="-fx-background-color: #3c7fb1,        linear-gradient(#fafdfe, #e8f5fc),        linear-gradient(#eaf6fd 0%, #d9f0fc 49%, #bee6fd 50%, #a7d9f5 100%); -fx-background-radius: 5,2,2; -fx-padding: 3 30 3 30; -fx-text-fill: black; -fx-background-insets: 0,1,2;" text="Start">
          <font>
             <Font name="System Bold" size="33.0" />
          </font>
       </Button>
-      <Button layoutX="45.0" layoutY="45.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: rgba(0,0,0,0.08),        linear-gradient(#9a9a9a, #909090),        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);" text="Back">
+      <Button fx:id="back" layoutX="45.0" layoutY="45.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color: rgba(0,0,0,0.08),        linear-gradient(#9a9a9a, #909090),        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);" text="Back">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Label layoutX="90.0" layoutY="189.0" prefHeight="67.0" prefWidth="150.0" text="username:">
+      <Label layoutX="90.0" layoutY="189.0" prefHeight="67.0" prefWidth="150.0" text="username:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="29.0" />
          </font>
       </Label>
-      <Label layoutX="111.0" layoutY="419.0" prefHeight="67.0" prefWidth="109.0" text="Difficulty:">
+      <Label layoutX="111.0" layoutY="419.0" prefHeight="67.0" prefWidth="109.0" text="Difficulty:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
       <TextField fx:id="name" layoutX="285.0" layoutY="197.0" prefHeight="52.0" prefWidth="212.0" />
       <ColorPicker fx:id="color" layoutX="312.0" layoutY="326.0" prefHeight="31.0" prefWidth="158.0" />
-      <Label layoutX="90.0" layoutY="308.0" prefHeight="67.0" prefWidth="150.0" text="ball color:">
+      <Label layoutX="90.0" layoutY="308.0" prefHeight="67.0" prefWidth="150.0" text="ball color:" textFill="WHITE">
          <font>
             <Font name="System Bold" size="29.0" />
          </font>

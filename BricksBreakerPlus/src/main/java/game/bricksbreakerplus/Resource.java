@@ -5,7 +5,23 @@ import javafx.scene.paint.Color;
 public class Resource {
     public static String name, difficulty;
     public static Color color;
-    public static boolean showArrows;
+    public static boolean showArrows = true, save = true, playMusic = true;
+
+    public static boolean isPlayMusic() {
+        return playMusic;
+    }
+
+    public static void setPlayMusic(boolean playMusic) {
+        Resource.playMusic = playMusic;
+    }
+
+    public static boolean isSave() {
+        return save;
+    }
+
+    public static void setSave(boolean save) {
+        Resource.save = save;
+    }
 
     public static boolean isShowArrows() {
         return showArrows;

@@ -20,6 +20,11 @@ public class SceneLoader {
     }
 
     public static Scene getStart() {
+        try {
+            Start = new Scene(new FXMLLoader(new File("./src/main/resources/game/bricksbreakerplus/fxml/Start.fxml").toURI().toURL()).load(), 600, 800);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return Start;
     }
 

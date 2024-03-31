@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -516,6 +517,7 @@ public class GraphicAgent{
         }
         flowDown.play();
     }
+    private Button play, pause;
     public void shootBall(){
 //        System.out.println("now");
 
@@ -627,6 +629,8 @@ public class GraphicAgent{
         GraphicAgent.difficulty = difficulty;
     }
 
+    boolean f, s, d, sp, p;
+
     public GraphicAgent(SoundLoader soundLoader, String difficulty, String name, boolean showArrows) {
         this.soundLoader = soundLoader;
         group = new Group();
@@ -636,6 +640,53 @@ public class GraphicAgent{
         scene = new Scene(group, 600, 800);
         board = new Board(difficulty, name, showArrows);
         balls = new ArrayList<>();
+
+        play = new Button("play");
+        play.setTranslateX(10);
+        play.setTranslateY(740);
+        play.setOnAction(event -> {
+            if(f)
+                flowDown.play();
+            if(s)
+                shoot.play();
+            if(d)
+                danceTimeline.play();
+            if(sp)
+                speedTimeline.play();
+            if(p)
+                powerTimeline.play();
+        });
+
+
+        pause = new Button("pause");
+        pause.setTranslateY(740);
+        pause.setTranslateX(60);
+        pause.setOnAction(event -> {
+            if(flowDown.getStatus().equals(Animation.Status.RUNNING))
+                f = true;
+            else f = false;
+            if(shoot.getStatus().equals(Animation.Status.RUNNING))
+                s = true;
+            else s = false;
+            if(danceTimeline.getStatus().equals(Animation.Status.RUNNING))
+                d = true;
+            else d = false;
+            if(speedTimeline.getStatus().equals(Animation.Status.RUNNING))
+                sp = true;
+            else sp = false;
+            if(powerTimeline.getStatus().equals(Animation.Status.RUNNING))
+                p = true;
+            else p = false;
+            flowDown.pause();
+            shoot.pause();
+            danceTimeline.pause();
+            speedTimeline.pause();
+            powerTimeline.pause();
+
+        });
+
+        group.getChildren().add(play);
+        group.getChildren().add(pause);
 
         GraphicAgent.setDifficulty(difficulty);
         if(difficulty.equals("normal"))

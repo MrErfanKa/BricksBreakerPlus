@@ -430,10 +430,6 @@ public class GraphicAgent{
                         boolean touchDown = ((Block)node).touchDown(normalBall);
                         boolean touchUp = ((Block)node).touchUp(normalBall);
 
-                        if(touchLeft || touchRight)
-                            normalBall.setChangeX(normalBall.getChangeX() * -1);
-                        if(touchDown || touchUp)
-                            normalBall.setChangeY(normalBall.getChangeY() * -1);
                         if(!touchDown && !touchLeft && !touchRight && !touchUp){
                             //   / line : x = y, y = x;
                             //   \ line : x = y * -1, y = x * -1
@@ -462,6 +458,12 @@ public class GraphicAgent{
                                 normalBall.setChangeY(tempX);
                             }
                         }
+
+                        if(touchLeft || touchRight)
+                            normalBall.setChangeX(normalBall.getChangeX() * -1);
+                        if(touchDown || touchUp)
+                            normalBall.setChangeY(normalBall.getChangeY() * -1);
+
                     }
                 }
             }

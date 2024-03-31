@@ -1,6 +1,7 @@
 package game.bricksbreakerplus.graphic;
 
 import game.bricksbreakerplus.BricksBreakerPlus;
+import game.bricksbreakerplus.Resource;
 import game.bricksbreakerplus.saveAndLoad.Saver;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -62,7 +63,8 @@ public class Lose {
         System.out.println(again.getWidth());
         System.out.println(newGame.getWidth());
         System.out.println(start.getWidth());
-        Saver.add(name, Integer.parseInt(points), difficulty);
+        if(Resource.isSave())
+            Saver.add(name, Integer.parseInt(points), difficulty);
         Saver.save();
     }
     public void Start(){
